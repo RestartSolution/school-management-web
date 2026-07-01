@@ -1,124 +1,201 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>স্কুল ম্যানেজমেন্ট - লগইন</title>
+    <title>Smart School Portal - Login</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom styles for matching the screenshot look */
+        .bg-gradient-left {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+        }
+    </style>
 </head>
-<body class="bg-slate-100 flex items-center justify-center h-screen px-4">
+<body class="bg-gray-50 font-sans h-screen flex overflow-hidden">
 
-    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-100">
-        <div class="text-center mb-6">
-            <div class="inline-flex p-3 bg-indigo-100 text-indigo-600 rounded-full mb-3">
-                <i class="fa-solid fa-school text-3xl"></i>
+    <!-- LEFT SIDE: Branding and Logo (Hidden on mobile, visible on desktop) -->
+    <div class="hidden lg:flex w-1/2 bg-gradient-left text-white flex-col justify-between p-12 relative">
+        <div class="flex flex-col items-center justify-center my-auto space-y-6 text-center">
+            <!-- School Logo Container -->
+            <div class="w-24 h-24 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl">
+                <i class="fa-solid fa-school text-5xl text-indigo-300"></i>
             </div>
-            <h2 class="text-2xl font-bold text-gray-800">স্মার্ট স্কুল পোর্টাল</h2>
-            <p class="text-sm text-gray-500 mt-1">আপনার অ্যাকাউন্টে প্রবেশ করতে লগইন করুন</p>
+            
+            <div>
+                <h1 class="text-3xl font-black tracking-wide uppercase">SMART SCHOOL ERP</h1>
+                <p class="text-sm text-gray-400 mt-2 max-w-sm mx-auto">Complete Technical & Academic Management System for Modern Institutions</p>
+            </div>
         </div>
         
-        <form id="loginForm" class="space-y-4">
-            <!-- রোল সিলেকশন -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">আপনার পদবী বা রোল বাছুন</label>
-                <div class="relative mt-1">
-                    <select id="userRole" class="block w-full p-2.5 border border-gray-300 rounded-md bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
-                        <option value="">-- রোল সিলেক্ট করুন --</option>
-                        <option value="super-admin">সুপার এডমিন (Super Admin)</option>
-                        <option value="school-admin">স্কুল এডমিন (School Admin)</option>
-                        <option value="teacher">শিক্ষক (Teacher)</option>
-                        <option value="student">ছাত্র / অভিভাবক (Student)</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- স্কুল আইডি ইনপুট বক্স (সুপার এডমিন ছাড়া বাকি সবার জন্য এটি অটো ওপেন হবে) -->
-            <div id="schoolIdBox" class="hidden transition-all duration-300">
-                <label class="block text-sm font-medium text-gray-700">স্কুল ID (School ID)</label>
-                <div class="relative mt-1">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                        <i class="fa-solid fa-key text-xs"></i>
-                    </div>
-                    <input type="text" id="schoolId" class="block w-full pl-9 p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="যেমন: SCH-8492">
-                </div>
-            </div>
-
-            <!-- ইউজারনেম/ইমেইল -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">ইমেইল বা ইউজারনেম</label>
-                <div class="relative mt-1">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                        <i class="fa-solid fa-envelope text-xs"></i>
-                    </div>
-                    <input type="email" id="email" class="block w-full pl-9 p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="demo@school.com" required>
-                </div>
-            </div>
-
-            <!-- পাসওয়ার্ড -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">পাসওয়ার্ড</label>
-                <div class="relative mt-1">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                        <i class="fa-solid fa-lock text-xs"></i>
-                    </div>
-                    <input type="password" id="password" class="block w-full pl-9 p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="******" required>
-                </div>
-            </div>
-
-            <!-- লগইন বাটন -->
-            <button type="submit" class="w-full bg-indigo-600 text-white p-2.5 rounded-md font-semibold hover:bg-indigo-700 shadow transition duration-200 cursor-pointer">
-                <i class="fa-solid fa-right-to-bracket mr-1"></i> ড্যাশবোর্ডে প্রবেশ করুন
-            </button>
-        </form>
+        <!-- Footer info inside left panel -->
+        <div class="text-center text-xs text-gray-500">
+            &copy; 2026 SMART SCHOOL MANAGEMENT SYSTEM . ALL RIGHTS RESERVED
+        </div>
     </div>
 
-    <!-- জাভাস্ক্রিপ্ট লজিক -->
-    <script>
-        // রোল পরিবর্তনের সাথে সাথে স্কুল আইডি ফিল্ড কন্ট্রোল করার লজিক
-        document.getElementById('userRole').addEventListener('change', function() {
-            const role = this.value;
-            const idBox = document.getElementById('schoolIdBox');
-            const schoolIdInput = document.getElementById('schoolId');
-            
-            // সুপার এডমিন বা খালি থাকলে স্কুল আইডি লাগবে না, বাকিদের জন্য বাধ্যতামূলক
-            if (role === 'super-admin' || role === '') {
-                idBox.classList.add('hidden');
-                schoolIdInput.removeAttribute('required');
-                schoolIdInput.value = ''; // ক্লিয়ার করে দেওয়ার জন্য
-            } else {
-                idBox.classList.remove('hidden');
-                schoolIdInput.setAttribute('required', 'required');
-            }
-        });
+    <!-- RIGHT SIDE: Multi-Role Login Form -->
+    <div class="w-full lg:w-1/2 bg-white flex flex-col justify-center p-8 md:p-16 overflow-y-auto">
+        
+        <div class="max-w-md w-full mx-auto space-y-6">
+            <!-- Badge -->
+            <div class="inline-flex items-center space-x-1.5 bg-orange-50 border border-orange-100 px-3 py-1 rounded-full text-xs font-bold text-orange-600">
+                <i class="fa-solid fa-building-columns"></i>
+                <span>PORTAL LOGIN</span>
+            </div>
 
-        // ফর্ম সাবমিট হ্যান্ডলার
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            <!-- Welcome Text -->
+            <div>
+                <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Welcome back 👋</h2>
+                <p class="text-sm text-gray-500 mt-1">Sign in to your specific portal to continue.</p>
+            </div>
+
+            <!-- Role Selector Tabs (Matching image tabs style) -->
+            <div class="bg-gray-100 p-1 rounded-xl flex space-x-1 text-sm font-medium">
+                <button type="button" onclick="selectRole('super-admin', this)" class="role-tab flex-1 py-2 text-center rounded-lg transition-all duration-200 bg-white text-gray-900 shadow-sm">Super Admin</button>
+                <button type="button" onclick="selectRole('school-admin', this)" class="role-tab flex-1 py-2 text-center rounded-lg transition-all duration-200 text-gray-600 hover:text-gray-900">School</button>
+                <button type="button" onclick="selectRole('teacher', this)" class="role-tab flex-1 py-2 text-center rounded-lg transition-all duration-200 text-gray-600 hover:text-gray-900">Teacher</button>
+                <button type="button" onclick="selectRole('student', this)" class="role-tab flex-1 py-2 text-center rounded-lg transition-all duration-200 text-gray-600 hover:text-gray-900">Student</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="mainLoginForm" class="space-y-4">
+                <!-- Hidden input to track current selected role -->
+                <input type="hidden" id="selectedRole" value="super-admin">
+
+                <!-- School ID Field (Only shown for School, Teacher, Student) -->
+                <div id="schoolIdContainer" class="hidden transition-all duration-200">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">School ID</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fa-solid fa-hashtag text-xs"></i></span>
+                        <input type="text" id="schoolId" class="w-full bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-lg pl-9 p-3 text-sm outline-none" placeholder="e.g., SCH-8492">
+                    </div>
+                </div>
+
+                <!-- Username/Email Field -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">Username / Email</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fa-solid fa-user text-xs"></i></span>
+                        <input type="text" id="username" class="w-full bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-lg pl-9 p-3 text-sm outline-none" placeholder="Enter your username" required>
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fa-solid fa-lock text-xs"></i></span>
+                        <input type="password" id="password" class="w-full bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-lg pl-9 p-3 text-sm outline-none" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <!-- Keep me signed in -->
+                <div class="flex items-center">
+                    <input type="checkbox" id="remember" class="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500">
+                    <label for="remember" class="ml-2 text-xs text-gray-500 font-medium cursor-pointer">Keep me signed in</label>
+                </div>
+
+                <!-- Security Verification Block (Matching the image Captcha layout) -->
+                <div class="bg-indigo-50/50 border border-indigo-100/60 rounded-xl p-4 space-y-3">
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-indigo-600 flex items-center"><i class="fa-solid fa-shield-halved mr-1"></i> Security Verification</span>
+                    <div class="flex items-center space-x-2">
+                        <!-- Captcha Box -->
+                        <div id="captchaBox" class="flex-1 bg-white border border-gray-200 rounded-lg p-2 text-center text-lg font-mono font-bold tracking-widest text-emerald-600 select-none shadow-inner">
+                            Hp0ATq
+                        </div>
+                        <!-- Refresh Captcha Button -->
+                        <button type="button" onclick="refreshCaptcha()" class="p-2.5 bg-white border border-gray-200 rounded-lg text-gray-500 hover:text-gray-800 transition shadow-sm"><i class="fa-solid fa-rotate-right"></i></button>
+                    </div>
+                    <!-- Type Code Input -->
+                    <input type="text" id="captchaInput" class="w-full bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-lg p-2.5 text-center text-sm outline-none font-medium" placeholder="Type the code above" required>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full bg-orange-600 text-white p-3 rounded-lg font-bold text-sm hover:bg-orange-700 shadow-lg shadow-orange-100 transition duration-200 flex items-center justify-center space-x-2 cursor-pointer">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span id="submitBtnText">Sign In as Super Admin</span>
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Client-side Logic Script -->
+    <script>
+        // Tab switching logic
+        function selectRole(role, button) {
+            // Update hidden role input
+            document.getElementById('selectedRole').value = role;
+            
+            // Toggle tab active styles
+            document.querySelectorAll('.role-tab').forEach(tab => {
+                tab.classList.remove('bg-white', 'text-gray-900', 'shadow-sm');
+                tab.classList.add('text-gray-600', 'hover:text-gray-900');
+            });
+            button.classList.add('bg-white', 'text-gray-900', 'shadow-sm');
+            button.classList.remove('text-gray-600', 'hover:text-gray-900');
+
+            // Handle School ID display condition
+            const schoolIdContainer = document.getElementById('schoolIdContainer');
+            const schoolIdInput = document.getElementById('schoolId');
+            const submitBtnText = document.getElementById('submitBtnText');
+
+            if (role === 'super-admin') {
+                schoolIdContainer.classList.add('hidden');
+                schoolIdInput.removeAttribute('required');
+                submitBtnText.innerText = "Sign In as Super Admin";
+            } else {
+                schoolIdContainer.classList.remove('hidden');
+                schoolIdInput.setAttribute('required', 'required');
+                
+                // Capitalize role text for button dynamic update
+                let roleDisplay = role.replace('-', ' ').replace(/(^\w|\s\w)/g, m => m.toUpperCase());
+                submitBtnText.innerText = `Sign In as ${roleDisplay}`;
+            }
+        }
+
+        // Generate simple alphanumeric random captcha
+        function refreshCaptcha() {
+            const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let captcha = "";
+            for (let i = 0; i < 6; i++) {
+                captcha += chars[Math.floor(Math.random() * chars.length)];
+            }
+            document.getElementById('captchaBox').innerText = captcha;
+        }
+
+        // Initialize captcha on load
+        window.onload = refreshCaptcha;
+
+        // Form Submit Handler
+        document.getElementById('mainLoginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const role = document.getElementById('userRole').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const schoolId = document.getElementById('schoolId').value;
+            const role = document.getElementById('selectedRole').value;
+            const currentCaptcha = document.getElementById('captchaBox').innerText.trim();
+            const userCaptchaInput = document.getElementById('captchaInput').value.trim();
 
-            if(email && password) {
-                // সুপার এডমিনের জন্য কোনো স্কুল আইডি লাগবে না
-                if(role === 'super-admin') {
-                    window.location.href = 'super-admin.html';
-                } else {
-                    // ডেমো এলার্ট - ডেটাবেস যুক্ত করার পর এটি ডাটা চেক করবে 
-                    alert('স্কুল আইডি: ' + schoolId + ' এর অধীনে আপনাকে ড্যাশবোর্ডে রিডাইরেক্ট করা হচ্ছে।');
-                    
-                    if(role === 'school-admin') {
-                        window.location.href = 'school-admin.html';
-                    } else if(role === 'teacher') {
-                        window.location.href = 'teacher.html';
-                    } else if(role === 'student') {
-                        window.location.href = 'student.html';
-                    }
-                }
+            // Simple Captcha validation
+            if (userCaptchaInput !== currentCaptcha) {
+                alert("Security Verification Code failed! Please check capitalization.");
+                refreshCaptcha();
+                document.getElementById('captchaInput').value = "";
+                return;
+            }
+
+            // Route dynamically depending on role choice
+            if(role === 'super-admin') {
+                window.location.href = 'super-admin.html';
+            } else if(role === 'school-admin') {
+                window.location.href = 'school-admin.html';
+            } else if(role === 'teacher') {
+                window.location.href = 'teacher.html';
+            } else if(role === 'student') {
+                window.location.href = 'student.html';
             }
         });
     </script>

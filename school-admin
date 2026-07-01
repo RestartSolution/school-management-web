@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Administration Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 font-sans flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <div class="w-64 bg-indigo-950 text-white flex flex-col justify-between hidden md:flex">
+        <div class="p-5">
+            <h1 class="text-lg font-black tracking-wider mb-8 text-indigo-400 uppercase"><i class="fa-solid fa-school mr-2"></i> School ERP</h1>
+            <nav class="space-y-1 text-sm font-medium">
+                <a href="#" class="block p-3 rounded bg-indigo-800 transition"><i class="fa-solid fa-chart-line mr-2"></i> Dashboard Overview</a>
+                <a href="#" class="block p-3 rounded hover:bg-indigo-900/50 transition"><i class="fa-solid fa-chalkboard-user mr-2"></i> Manage Teachers</a>
+                <a href="#" class="block p-3 rounded hover:bg-indigo-900/50 transition"><i class="fa-solid fa-graduation-cap mr-2"></i> Student Admission</a>
+                <a href="#" class="block p-3 rounded hover:bg-indigo-900/50 transition"><i class="fa-solid fa-layer-group mr-2"></i> Classes & Sections</a>
+                <a href="#" class="block p-3 rounded hover:bg-indigo-900/50 transition"><i class="fa-solid fa-file-invoice-dollar mr-2"></i> Fees Management</a>
+            </nav>
+        </div>
+        <div class="p-5">
+            <a href="index.html" class="block text-center bg-red-600 p-2.5 rounded-lg text-sm font-bold hover:bg-red-700 transition"><i class="fa-solid fa-right-from-bracket mr-2"></i> Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+        <!-- Top Header -->
+        <header class="bg-white border-b p-4 flex justify-between items-center px-8 shadow-sm">
+            <h2 class="text-xl font-bold text-gray-800">Campus Overview</h2>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm font-semibold bg-indigo-50 text-indigo-700 px-3 py-1 rounded">ID: SCH-8492</span>
+                <div class="w-9 h-9 rounded-xl bg-orange-600 text-white flex items-center justify-center font-bold">A</div>
+            </div>
+        </header>
+
+        <!-- Main Stats & Forms -->
+        <main class="p-6 space-y-6">
+            <!-- Metric Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-xl border shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Total Students</p>
+                        <h3 class="text-2xl font-black text-gray-800 mt-1">1,250</h3>
+                    </div>
+                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl border border-blue-100"><i class="fa-solid fa-users text-lg"></i></div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Active Faculty</p>
+                        <h3 class="text-2xl font-black text-gray-800 mt-1">45</h3>
+                    </div>
+                    <div class="p-3 bg-green-50 text-green-600 rounded-xl border border-green-100"><i class="fa-solid fa-user-tie text-lg"></i></div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Total Classes</p>
+                        <h3 class="text-2xl font-black text-gray-800 mt-1">12</h3>
+                    </div>
+                    <div class="p-3 bg-yellow-50 text-yellow-600 rounded-xl border border-yellow-100"><i class="fa-solid fa-school-flag text-lg"></i></div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Fees Collected</p>
+                        <h3 class="text-2xl font-black text-emerald-600 mt-1">₹1,85,000</h3>
+                    </div>
+                    <div class="p-3 bg-purple-50 text-purple-600 rounded-xl border border-purple-100"><i class="fa-solid fa-money-bill-wave text-lg"></i></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Admission Form -->
+                <div class="bg-white p-6 rounded-xl border shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2"><i class="fa-solid fa-user-plus mr-1 text-orange-600"></i> Student Admission Form</h3>
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Full Name</label>
+                                <input type="text" class="w-full p-2 border rounded-lg text-sm outline-none focus:border-orange-500" placeholder="John Doe" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Roll Number</label>
+                                <input type="number" class="w-full p-2 border rounded-lg text-sm outline-none focus:border-orange-500" placeholder="10" required>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Assign Class</label>
+                                <select class="w-full p-2 border rounded-lg text-sm bg-white outline-none focus:border-orange-500">
+                                    <option>Class 1</option>
+                                    <option>Class 2</option>
+                                    <option>Class 3</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Section</label>
+                                <select class="w-full p-2 border rounded-lg text-sm bg-white outline-none focus:border-orange-500">
+                                    <option>Section A</option>
+                                    <option>Section B</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Guardian Mobile</label>
+                            <input type="tel" class="w-full p-2 border rounded-lg text-sm outline-none focus:border-orange-500" placeholder="+91 XXXXX XXXXX" required>
+                        </div>
+                        <button type="button" onclick="alert('Student admitted successfully! (Demo)')" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-indigo-700 transition">Enroll Student</button>
+                    </form>
+                </div>
+
+                <!-- Recent Fees Logs -->
+                <div class="bg-white p-6 rounded-xl border shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2"><i class="fa-solid fa-receipt mr-1 text-amber-500"></i> Recent Revenue Logs</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-600">
+                            <thead class="bg-gray-50 text-xs text-gray-700 uppercase font-bold">
+                                <tr>
+                                    <th class="p-3">Student</th>
+                                    <th class="p-3">Class</th>
+                                    <th class="p-3">Type</th>
+                                    <th class="p-3">Amount</th>
+                                    <th class="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y text-xs">
+                                <tr>
+                                    <td class="p-3 font-semibold text-gray-950">Rahul Sharma</td>
+                                    <td class="p-3">Class 5</td>
+                                    <td class="p-3">Tuition Fee</td>
+                                    <td class="p-3">₹500</td>
+                                    <td class="p-3"><span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-gray-950">Priya Das</td>
+                                    <td class="p-3">Class 3</td>
+                                    <td class="p-3">Exam Fee</td>
+                                    <td class="p-3">₹300</td>
+                                    <td class="p-3"><span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-gray-950">Amit Paul</td>
+                                    <td class="p-3">Class 4</td>
+                                    <td class="p-3">Tuition Fee</td>
+                                    <td class="p-3">₹500</td>
+                                    <td class="p-3"><span class="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Pending</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
