@@ -3,116 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin Control Panel</title>
+    <title>Root Terminal - Admin Center</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-gray-50 font-sans flex">
+<body class="bg-slate-50 font-sans flex h-screen overflow-hidden text-slate-800">
 
-    <!-- Sidebar -->
-    <div class="w-64 bg-slate-900 h-screen text-white p-5 hidden md:flex flex-col justify-between">
-        <div>
-            <h2 class="text-xl font-bold mb-8 text-indigo-400 flex items-center"><i class="fa-solid fa-user-shield mr-2"></i> Super Admin</h2>
-            <nav class="space-y-2">
-                <a href="#" class="block p-3 rounded bg-slate-800 text-sm font-medium"><i class="fa-solid fa-school mr-2"></i> Registered Institutions</a>
+    <!-- Sidebar Layout -->
+    <div class="w-64 bg-slate-950 text-white flex flex-col justify-between hidden md:flex">
+        <div class="p-5">
+            <h1 class="text-sm font-black tracking-widest mb-8 text-indigo-400 uppercase flex items-center"><i class="fa-solid fa-shield-halved mr-2 text-teal-400"></i> Root Network</h1>
+            <nav class="space-y-1 text-xs font-bold uppercase tracking-wider">
+                <a href="#" class="block p-3 rounded bg-indigo-900/50 text-indigo-200 border-l-4 border-indigo-500"><i class="fa-solid fa-network-wired mr-2"></i> Institution Pipeline</a>
             </nav>
         </div>
-        <div>
-            <a href="index.html" class="block p-3 rounded bg-red-600 hover:bg-red-700 text-center font-bold text-sm transition"><i class="fa-solid fa-right-from-bracket mr-2"></i> Logout</a>
+        <div class="p-5">
+            <a href="index.html" class="block text-center bg-rose-600/10 text-rose-400 p-2.5 rounded-xl text-xs font-bold border border-rose-500/20 hover:bg-rose-600 hover:text-white transition"><i class="fa-solid fa-power-off mr-2"></i> Terminate Session</a>
         </div>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="flex-1 p-6 md:p-8 overflow-y-auto h-screen">
-        <header class="flex justify-between items-center mb-6 border-b pb-4">
-            <h1 class="text-2xl font-black text-gray-800 uppercase tracking-wide">Main Control Panel</h1>
-            <span class="bg-indigo-50 border border-indigo-100 text-indigo-700 px-4 py-1.5 rounded-lg font-bold text-sm">Total Active Schools: 2</span>
+    <!-- Main Application Core -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+        <!-- Top Navigation Status Header -->
+        <header class="bg-white border-b border-slate-200 p-4 flex justify-between items-center px-6 md:px-8 shadow-sm">
+            <h2 class="text-md font-black text-slate-900 tracking-tight flex items-center uppercase"><i class="fa-solid fa-bars-staggered mr-2 text-slate-400 md:hidden"></i> Registration Management Console</h2>
+            <div class="md:hidden">
+                <a href="index.html" class="bg-rose-50 text-rose-600 p-2 rounded-xl text-xs font-bold border border-rose-200"><i class="fa-solid fa-power-off"></i></a>
+            </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Add/Approve School Form -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border lg:col-span-1">
-                <h3 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b"><i class="fa-solid fa-plus-circle text-orange-600 mr-1"></i> Register New Institution</h3>
-                <form id="schoolRegForm" class="space-y-4">
+        <!-- Dynamic Content Engine Viewport -->
+        <main class="p-4 md:p-8 space-y-6">
+            
+            <!-- Quick System Analytics Counter Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
                     <div>
-                        <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Institution Name</label>
-                        <input type="text" id="schoolName" class="w-full p-2.5 border rounded-lg text-sm outline-none focus:border-orange-500" placeholder="e.g., St. Xavier's High School" required>
+                        <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Pending Applications</span>
+                        <h3 id="pendingCounter" class="text-2xl font-black text-slate-900 mt-0.5">0</h3>
                     </div>
+                    <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center border border-amber-100"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
                     <div>
-                        <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Admin Email</label>
-                        <input type="email" id="schoolEmail" class="w-full p-2.5 border rounded-lg text-sm outline-none focus:border-orange-500" placeholder="admin@school.com" required>
+                        <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Active Node Clusters</span>
+                        <h3 id="activeCounter" class="text-2xl font-black text-slate-900 mt-0.5">0</h3>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Auto-Generated School ID</label>
-                        <input type="text" id="generatedId" class="w-full p-2.5 bg-gray-50 border rounded-lg text-sm text-orange-600 font-bold tracking-wider outline-none" readonly placeholder="Click button below">
-                    </div>
-                    <button type="button" onclick="generateSchoolID()" class="w-full bg-slate-700 text-white p-2.5 rounded-lg text-xs font-bold hover:bg-slate-800 transition">1. Generate Unique ID</button>
-                    <button type="submit" class="w-full bg-orange-600 text-white p-2.5 rounded-lg text-sm font-bold hover:bg-orange-700 transition shadow-md shadow-orange-100">2. Approve & Save</button>
-                </form>
+                    <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center border border-emerald-100"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
             </div>
 
-            <!-- Registered Schools List -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border lg:col-span-2">
-                <h3 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b"><i class="fa-solid fa-list text-emerald-600 mr-1"></i> Approved Institution Directory</h3>
+            <!-- Main Live Network Datagrid -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500"><i class="fa-solid fa-list-check mr-1 text-indigo-500"></i> Inbound Registration Queues</h3>
+                    <button onclick="fetchLiveSchools()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition cursor-pointer flex items-center space-x-1"><i class="fa-solid fa-rotate"></i> <span>Refresh Feed</span></button>
+                </div>
+                
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-600">
-                        <thead class="bg-gray-50 text-gray-700 font-bold uppercase text-xs">
+                    <table class="w-full text-sm text-left text-slate-600">
+                        <thead class="bg-slate-50/70 text-[10px] text-slate-500 uppercase font-bold tracking-wider border-b border-slate-100">
                             <tr>
-                                <th class="p-3">School ID</th>
-                                <th class="p-3">Institution Name</th>
-                                <th class="p-3">Admin Email</th>
-                                <th class="p-3">Status</th>
+                                <th class="p-4">Node ID</th>
+                                <th class="p-4">Institution Profile</th>
+                                <th class="p-4">Primary Admin Endpoint</th>
+                                <th class="p-4 text-center">Status</th>
+                                <th class="p-4 text-right">Operational Logic</th>
                             </tr>
                         </thead>
-                        <tbody id="schoolTableBody" class="divide-y">
+                        <tbody id="schoolTableBody" class="divide-y divide-slate-100 text-xs">
+                            <!-- Live Database Rows Will Append Inject Dynamically Here -->
                             <tr>
-                                <td class="p-3 font-bold text-orange-600 tracking-wider">SCH-8492</td>
-                                <td class="p-3 font-semibold text-gray-900">Kolkata Public School</td>
-                                <td class="p-3 text-xs">kps@gmail.com</td>
-                                <td class="p-3"><span class="bg-green-100 text-green-800 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full">Active</span></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-bold text-orange-600 tracking-wider">SCH-3104</td>
-                                <td class="p-3 font-semibold text-gray-900">Nabadiganta Vidyapith</td>
-                                <td class="p-3 text-xs">ndv@gmail.com</td>
-                                <td class="p-3"><span class="bg-green-100 text-green-800 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full">Active</span></td>
+                                <td colspan="5" class="p-8 text-center text-slate-400 font-medium">Initializing secure database tunnel stream...</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
+    <!-- Live Database Reading & Operation Automation Pipelines -->
+   <!-- Live Database Reading & Operation Automation Pipelines -->
     <script>
-        function generateSchoolID() {
-            const randomNum = Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('generatedId').value = 'SCH-' + randomNum;
-        }
+        // আপনার আসল প্রজেক্ট URL
+        const SUPABASE_URL = "https://iystmwxuzyhaoxmqlvof.supabase.co"; 
+        
+        // ⚠️ আপনার আগের স্ক্রিনশট থেকে আনা আসল ANON KEY-টি এই কোটেশনের ভেতর পেস্ট করুন:
+        const SUPABASE_ANON_KEY = "sb_publishable_1xHmvDN9TYSS3hoUGR7npQ_tUSa8dnh"; 
 
-        document.getElementById('schoolRegForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = document.getElementById('generatedId').value;
-            const name = document.getElementById('schoolName').value;
-            const email = document.getElementById('schoolEmail').value;
+        // আগের বারের মতো const মুছে দিয়ে শুধু supabase লেখা হলো, যাতে এরর না আসে
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            if(!id) {
-                alert('Please generate a School ID first!');
+        // Fetch & Stream Real-time School Records
+        async function fetchLiveSchools() {
+            const tableBody = document.getElementById('schoolTableBody');
+            
+            const { data: schools, error } = await supabase
+                .from('schools')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-rose-500 font-bold">Pipeline Error: ${error.message}</td></tr>`;
                 return;
             }
 
-            const table = document.getElementById('schoolTableBody');
-            const newRow = `<tr>
-                <td class="p-3 font-bold text-orange-600 tracking-wider">${id}</td>
-                <td class="p-3 font-semibold text-gray-900">${name}</td>
-                <td class="p-3 text-xs">${email}</td>
-                <td class="p-3"><span class="bg-green-100 text-green-800 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full">Active</span></td>
-            </tr>`;
-            
-            table.innerHTML += newRow;
-            document.getElementById('schoolRegForm').reset();
-            alert('Institution successfully registered!');
-        });
+            if (!schools || schools.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-400 font-medium">Zero data clusters found in this channel pipeline node.</td></tr>`;
+                document.getElementById('pendingCounter').innerText = "0";
+                document.getElementById('activeCounter').innerText = "0";
+                return;
+            }
+
+            // Calculate Metrics
+            let pendingCount = schools.filter(s => s.status === 'pending').length;
+            let activeCount = schools.filter(s => s.status === 'active').length;
+            document.getElementById('pendingCounter').innerText = pendingCount;
+            document.getElementById('activeCounter').innerText = activeCount;
+
+            // Clear loading state
+            tableBody.innerHTML = "";
+
+            // Loop and render rows
+            schools.forEach(school => {
+                let statusBadge = "";
+                let actionButton = "";
+
+                if (school.status === 'pending') {
+                    statusBadge = `<span class="px-2.5 py-1 text-[10px] font-bold bg-amber-50 text-amber-600 rounded-full border border-amber-100">Pending Authorization</span>`;
+                    actionButton = `<button onclick="approveInstitution('${school.id}')" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-indigo-700 shadow-sm transition cursor-pointer"><i class="fa-solid fa-circle-check"></i> Authorize</button>`;
+                } else if (school.status === 'active') {
+                    statusBadge = `<span class="px-2.5 py-1 text-[10px] font-bold bg-emerald-50 text-emerald-600 rounded-full border border-emerald-100">Live Active Node</span>`;
+                    actionButton = `<span class="text-slate-400 italic text-[11px]">No active tasks</span>`;
+                } else {
+                    statusBadge = `<span class="px-2.5 py-1 text-[10px] font-bold bg-rose-50 text-rose-600 rounded-full border border-rose-100">Suspended Cluster</span>`;
+                    actionButton = `<span class="text-rose-400 font-bold text-[11px]">Locked Node</span>`;
+                }
+
+                const rowHTML = `
+                    <tr class="hover:bg-slate-50/80 transition-colors duration-150 border-b border-slate-50">
+                        <td class="p-4 font-mono font-bold tracking-wider text-indigo-600">${school.id}</td>
+                        <td class="p-4 font-black text-slate-900">${school.school_name}</td>
+                        <td class="p-4 font-medium text-slate-500">
+                            <div><i class="fa-solid fa-envelope text-slate-300 mr-1"></i> ${school.admin_email}</div>
+                            <div class="mt-0.5"><i class="fa-solid fa-phone text-slate-300 mr-1"></i> ${school.contact_number}</div>
+                        </td>
+                        <td class="p-4 text-center">${statusBadge}</td>
+                        <td class="p-4 text-right">${actionButton}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += rowHTML;
+            });
+        }
+
+        // Live Database Record Update Action
+        async function approveInstitution(schoolId) {
+            if (!confirm(`Initialize cluster activation sequence for Node Reference ID: ${schoolId}?`)) return;
+
+            const { error } = await supabase
+                .from('schools')
+                .update({ status: 'active' }) 
+                .eq('id', schoolId);
+
+            if (error) {
+                alert("Operation Validation Error: " + error.message);
+            } else {
+                alert(`System Cluster Node "${schoolId}" is now officially fully authenticated & Active!`);
+                fetchLiveSchools(); // Auto reload view state feed instantly
+            }
+        }
+
+        // Initialize runtime sequence window lifecycle stream load hooks
+        window.onload = fetchLiveSchools;
     </script>
 </body>
 </html>
