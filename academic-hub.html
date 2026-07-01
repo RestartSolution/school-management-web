@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Hub - Secure Academic Terminal</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-50 font-sans flex h-screen overflow-hidden text-slate-800">
+
+    <!-- Faculty Sidebar Navigation -->
+    <div class="w-64 bg-slate-950 text-white flex flex-col justify-between hidden md:flex">
+        <div class="p-5">
+            <div class="text-center mb-8 border-b border-slate-800 pb-4">
+                <div class="w-12 h-12 bg-teal-600/20 text-teal-400 rounded-full flex items-center justify-center text-xl mx-auto mb-2"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <h1 class="text-xs font-black tracking-widest text-slate-300 uppercase">Faculty Console</h1>
+            </div>
+            <nav class="space-y-2">
+                <button class="w-full text-left p-3 rounded bg-teal-900/50 text-teal-200 border-l-4 border-teal-500 font-bold block cursor-pointer">
+                    <i class="fa-solid fa-clipboard-user mr-2"></i> Attendance Log
+                </button>
+            </nav>
+        </div>
+        <div class="p-5">
+            <!-- 🚀 টিচাররা এখান থেকে সরাসরি লগআউট হয়ে ইমডেক্স পেজে চলে যাবে -->
+            <a href="index.html" class="block text-center bg-rose-600/10 text-rose-400 p-2.5 rounded-xl text-xs font-bold border border-rose-500/20 hover:bg-rose-600 hover:text-white transition"><i class="fa-solid fa-power-off mr-2"></i> Terminate Session</a>
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+        <header class="bg-white border-b border-slate-200 p-4 flex justify-between items-center px-6 md:px-8 shadow-sm">
+            <h2 class="text-md font-black text-slate-900 tracking-tight flex items-center uppercase"><i class="fa-solid fa-clipboard-list mr-2 text-teal-500"></i> Daily Batch Attendance Engine</h2>
+            <span class="text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-700 px-3 py-1 rounded-full border border-amber-200">Restricted Faculty Access</span>
+        </header>
+
+        <main class="p-4 md:p-8 space-y-6">
+            <!-- Filter Bar -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-end gap-4">
+                <div class="flex-1">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Select Active Class Target</label>
+                    <select id="attendanceClassSelect" onchange="loadStudentsForAttendance()" class="w-full bg-slate-50 border border-slate-200 focus:border-teal-600 rounded-xl p-3 text-sm font-bold outline-none text-slate-700">
+                        <option value="">-- Choose Class Group --</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Log Date Override</label>
+                    <input type="date" id="attendanceDateSelect" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-bold text-slate-700 outline-none">
+                </div>
+            </div>
+
+            <!-- Data Grid (Same as before) -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hidden" id="attendanceGridContainer">
+                <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500"><i class="fa-solid fa-users text-teal-500 mr-1"></i> Student Batch Manifest</h3>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="downloadAttendanceCSV()" class="bg-teal-50 border border-teal-200 text-teal-600 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-teal-600 hover:text-white transition cursor-pointer flex items-center space-x-1"><i class="fa-solid fa-file-arrow-down"></i> <span>Export Log</span></button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-slate-600">
+                        <thead class="bg-slate-50/30 text-[10px] text-slate-500 uppercase font-bold tracking-wider border-b border-slate-100">
+                            <tr><th class="p-4">Student Name</th><th class="p-4">Roll ID</th><th class="p-4 text-center">Status Action</th></tr>
+                        </thead>
+                        <tbody id="attendanceTableBody" class="divide-y divide-slate-100 text-xs font-medium"></tbody>
+                    </table>
+                </div>
+                <div class="p-5 bg-slate-50 border-t border-slate-100 flex justify-end">
+                    <button onclick="saveBatchAttendancePayload()" class="bg-emerald-600 text-white px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 shadow-md transition cursor-pointer"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Lock Attendance Batch</button>
+                </div>
+            </div>
+
+            <div id="attendanceEmptyState" class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center space-y-3">
+                <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 mx-auto text-lg border border-slate-100"><i class="fa-solid fa-clipboard-list"></i></div>
+                <h4 class="text-sm font-bold text-slate-700">Awaiting Target Selection</h4>
+                <p class="text-xs text-slate-400 max-w-xs mx-auto">Select a class scope above to fetch the active student roster matrix.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Live Execution Scripts -->
+    <script>
+        const SUPABASE_URL = "https://iystmwxuzyhaoxmqlvof.supabase.co"; 
+        const SUPABASE_ANON_KEY = "sb_publishable_1xHmvDN9TYSS3hoUGR7npQ_tUSa8dnh"; 
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        document.getElementById('attendanceDateSelect').valueAsDate = new Date();
+
+        // Populate Classes
+        async function populateAttendanceClassDropdown() {
+            const attClassSelect = document.getElementById('attendanceClassSelect');
+            const { data: classes } = await supabase.from('classes').select('id, class_name, section_name');
+            attClassSelect.innerHTML = `<option value="">-- Choose Class Group --</option>`;
+            if (classes) classes.forEach(c => { attClassSelect.innerHTML += `<option value="${c.id}">${c.class_name} (${c.section_name})</option>`; });
+        }
+
+        // Fetch Students
+        async function loadStudentsForAttendance() {
+            const classId = document.getElementById('attendanceClassSelect').value;
+            const tableBody = document.getElementById('attendanceTableBody');
+            const gridContainer = document.getElementById('attendanceGridContainer');
+            const emptyState = document.getElementById('attendanceEmptyState');
+
+            if (!classId) { gridContainer.classList.add('hidden'); emptyState.classList.remove('hidden'); return; }
+            gridContainer.classList.remove('hidden'); emptyState.classList.add('hidden');
+            tableBody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-slate-400 font-bold">Connecting secure database node...</td></tr>`;
+
+            const { data: students, error } = await supabase.from('user_profiles').select('id, username, full_name').eq('role', 'student').eq('class_id', classId);
+            if (error) { tableBody.innerHTML = `<tr><td colspan="3" class="p-4 text-rose-500">Failed: ${error.message}</td></tr>`; return; }
+            if (!students || students.length === 0) { tableBody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-slate-400">No students found.</td></tr>`; return; }
+
+            tableBody.innerHTML = "";
+            students.forEach(student => {
+                tableBody.innerHTML += `
+                    <tr class="hover:bg-slate-50/70 transition border-b border-slate-50 data-student-row" data-id="${student.id}" data-name="${student.full_name}" data-username="${student.username}">
+                        <td class="p-4 font-black text-slate-900">${student.full_name}</td>
+                        <td class="p-4 font-mono font-bold text-slate-400">${student.username}</td>
+                        <td class="p-4 flex items-center justify-center space-x-6">
+                            <label class="flex items-center space-x-1.5 cursor-pointer text-xs font-bold text-emerald-600 bg-emerald-50 border px-3 py-1.5 rounded-xl"><input type="radio" name="status-${student.id}" value="present" checked class="accent-emerald-600 w-4 h-4"> <span>Present</span></label>
+                            <label class="flex items-center space-x-1.5 cursor-pointer text-xs font-bold text-rose-600 bg-rose-50 border px-3 py-1.5 rounded-xl"><input type="radio" name="status-${student.id}" value="absent" class="accent-rose-600 w-4 h-4"> <span>Absent</span></label>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        // Save Batch Payload
+        async function saveBatchAttendancePayload() {
+            const classId = document.getElementById('attendanceClassSelect').value;
+            const attendanceDate = document.getElementById('attendanceDateSelect').value;
+            const rows = document.querySelectorAll('.data-student-row');
+            if (!classId || !attendanceDate || rows.length === 0) return;
+
+            const batchPayload = [];
+            rows.forEach(row => {
+                const studentId = row.getAttribute('data-id');
+                const selectedStatus = document.querySelector(`input[name="status-${studentId}"]:checked`).value;
+                batchPayload.push({ school_id: "SCH-8576", class_id: parseInt(classId), student_id: studentId, attendance_date: attendanceDate, status: selectedStatus });
+            });
+
+            const { error } = await supabase.from('attendance').insert(batchPayload);
+            if (error) {
+                if (error.code === '23505') alert("Conflict: Attendance already logged for this date.");
+                else alert("Error: " + error.message);
+            } else { alert("Log successful!"); }
+        }
+
+        // Export CSV
+        function downloadAttendanceCSV() {
+            const classLabel = document.getElementById('attendanceClassSelect').options[document.getElementById('attendanceClassSelect').selectedIndex].text;
+            const logDate = document.getElementById('attendanceDateSelect').value;
+            const rows = document.querySelectorAll('.data-student-row');
+            if (rows.length === 0) return;
+
+            let csvContent = "data:text/csv;charset=utf-8,Attendance Log, Class: " + classLabel + ", Date: " + logDate + "\n\nStudent Name,Roll ID,Status\n";
+            rows.forEach(row => {
+                const sName = row.getAttribute('data-name');
+                const sUser = row.getAttribute('data-username');
+                const sStatus = document.querySelector(`input[name="status-${row.getAttribute('data-id')}"]:checked`).value.toUpperCase();
+                csvContent += `"${sName}","${sUser}","${sStatus}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const downloadLink = document.createElement("a");
+            downloadLink.setAttribute("href", encodedUri);
+            downloadLink.setAttribute("download", `Log_${logDate}.csv`);
+            document.body.appendChild(downloadLink); downloadLink.click(); document.body.removeChild(downloadLink);
+        }
+
+        window.onload = function() { populateAttendanceClassDropdown(); }
+    </script>
+</body>
+</html>

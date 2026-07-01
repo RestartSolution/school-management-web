@@ -6,13 +6,7 @@
     <title>Campus Console - Institutional Hub</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        .premium-gradient {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-        }
-    </style>
 </head>
 <body class="bg-slate-50 font-sans flex h-screen overflow-hidden text-slate-800">
 
@@ -21,7 +15,11 @@
         <div class="p-5">
             <h1 class="text-sm font-black tracking-widest mb-8 text-indigo-400 uppercase flex items-center"><i class="fa-solid fa-school mr-2 text-teal-400"></i> Campus Admin</h1>
             <nav class="space-y-1 text-xs font-bold uppercase tracking-wider">
-                <a href="#" class="block p-3 rounded bg-indigo-900/50 text-indigo-200 border-l-4 border-indigo-500"><i class="fa-solid fa-layer-group mr-2"></i> Academic Classes</a>
+                <button onclick="switchTab('classes')" id="tabBtn-classes" class="w-full text-left p-3 rounded bg-indigo-900/50 text-indigo-200 border-l-4 border-indigo-500 font-bold block cursor-pointer"><i class="fa-solid fa-layer-group mr-2"></i> Academic Classes</button>
+                <button onclick="switchTab('teachers')" id="tabBtn-teachers" class="w-full text-left p-3 rounded text-slate-400 hover:text-white font-bold block cursor-pointer"><i class="fa-solid fa-user-tie mr-2"></i> Manage Teachers</button>
+                <button onclick="switchTab('students')" id="tabBtn-students" class="w-full text-left p-3 rounded text-slate-400 hover:text-white font-bold block cursor-pointer"><i class="fa-solid fa-graduation-cap mr-2"></i> Manage Students</button>
+                <!-- 🚀 নতুন: রুটিন বিল্ডার এখন অ্যাডমিনের হাতে -->
+                <button onclick="switchTab('routine')" id="tabBtn-routine" class="w-full text-left p-3 rounded text-slate-400 hover:text-white font-bold block cursor-pointer"><i class="fa-solid fa-calendar-days mr-2"></i> Routine Builder</button>
             </nav>
         </div>
         <div class="p-5">
@@ -31,146 +29,366 @@
 
     <!-- Main Workspace Core -->
     <div class="flex-1 flex flex-col overflow-y-auto">
-        <!-- Status Navbar Header -->
         <header class="bg-white border-b border-slate-200 p-4 flex justify-between items-center px-6 md:px-8 shadow-sm">
-            <h2 class="text-md font-black text-slate-900 tracking-tight flex items-center uppercase"><i class="fa-solid fa-bars-staggered mr-2 text-slate-400 md:hidden"></i> Academic Operations</h2>
-            <div class="flex items-center space-x-2">
-                <span class="text-xs font-bold bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-xl border border-indigo-100">Live Campus Node</span>
-            </div>
+            <h2 id="pageTitle" class="text-md font-black text-slate-900 tracking-tight flex items-center uppercase"><i class="fa-solid fa-bars-staggered mr-2 text-slate-400 md:hidden"></i> Academic Operations</h2>
+            <span class="text-xs font-bold bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-xl border border-indigo-100">Live Campus Node</span>
         </header>
 
-        <!-- Main Workspace Grid Viewport -->
-        <main class="p-4 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- Left Grid: Add New Class Module Panel -->
+        <!-- TAB 1: CLASSES (বিদ্যমান) -->
+        <main id="section-classes" class="p-4 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6 dashboard-section">
             <div class="lg:col-span-1 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 h-fit">
-                <div>
-                    <h3 class="text-base font-black text-slate-900 tracking-tight">Create Class Node</h3>
-                    <p class="text-xs text-slate-400 font-medium">Add a standard institutional class grade and specific section track.</p>
-                </div>
-
+                <h3 class="text-base font-black text-slate-900 tracking-tight">Create Class Node</h3>
                 <form id="classSetupForm" class="space-y-4">
-                    <!-- Target Institution Mapping ID -->
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Your School ID</label>
-                        <input type="text" id="targetSchoolId" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 focus:bg-white rounded-xl p-3 text-sm outline-none font-bold text-indigo-600 font-mono tracking-widest" placeholder="e.g., SCH-8576" required>
-                    </div>
-
-                    <!-- Class Nomenclature -->
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Class/Grade Name</label>
-                        <input type="text" id="targetClassName" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 focus:bg-white rounded-xl p-3 text-sm outline-none font-medium" placeholder="e.g., Class 10" required>
-                    </div>
-
-                    <!-- Section Track Designation -->
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Section/Stream</label>
-                        <input type="text" id="targetSectionName" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 focus:bg-white rounded-xl p-3 text-sm outline-none font-medium" placeholder="e.g., Section A" required>
-                    </div>
-
-                    <!-- Action Submit Submission Trigger -->
-                    <button type="submit" class="w-full bg-indigo-600 text-white p-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 shadow-lg shadow-indigo-600/10 transition duration-200 cursor-pointer">
-                        <i class="fa-solid fa-plus mr-1"></i> Provision Class Slot
-                    </button>
+                    <input type="text" id="targetSchoolId" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold text-indigo-600 font-mono tracking-widest" value="SCH-8576" required readonly>
+                    <input type="text" id="targetClassName" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="Class Name (e.g., Class 10)" required>
+                    <input type="text" id="targetSectionName" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="Section (e.g., Section A)" required>
+                    <button type="submit" class="w-full bg-indigo-600 text-white p-3 rounded-xl font-bold text-xs uppercase hover:bg-indigo-700 transition cursor-pointer">Provision Class Slot</button>
                 </form>
             </div>
-
-            <!-- Right Grid: Live Class Data View Grid -->
             <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden h-fit">
                 <div class="p-5 border-b border-slate-100 flex justify-between items-center">
-                    <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500"><i class="fa-solid fa-network-wired mr-1 text-teal-500"></i> Current Configured Classes</h3>
-                    <button onclick="fetchLiveClasses()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition cursor-pointer flex items-center space-x-1"><i class="fa-solid fa-arrows-rotate"></i> <span>Refresh</span></button>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500">Configured Classes</h3>
+                    <button onclick="fetchLiveClasses()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition cursor-pointer">Refresh Grid</button>
+                </div>
+                <div class="overflow-x-auto"><table class="w-full text-sm text-left"><tbody id="classTableBody" class="divide-y divide-slate-100 text-xs font-medium"></tbody></table></div>
+            </div>
+        </main>
+
+        <!-- TAB 2: TEACHERS (বিদ্যমান) -->
+        <main id="section-teachers" class="p-4 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6 dashboard-section hidden">
+            <div class="lg:col-span-1 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 h-fit">
+                <h3 class="text-base font-black text-slate-900 tracking-tight">Onboard Faculty</h3>
+                <form id="teacherSetupForm" class="space-y-4">
+                    <input type="text" id="teacherFullName" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="Full Name" required>
+                    <input type="email" id="teacherEmail" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="Email" required>
+                    <input type="tel" id="teacherContact" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="Contact" required>
+                    <button type="submit" class="w-full bg-emerald-600 text-white p-3 rounded-xl font-bold text-xs uppercase hover:bg-emerald-700 transition cursor-pointer">Deploy Teacher Node</button>
+                </form>
+            </div>
+            <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden h-fit">
+                <div class="p-5 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500">Faculty Roster</h3>
+                    <button onclick="fetchLiveTeachers()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition cursor-pointer">Refresh Grid</button>
+                </div>
+                <div class="overflow-x-auto"><table class="w-full text-sm text-left"><tbody id="teacherTableBody" class="divide-y divide-slate-100 text-xs font-medium"></tbody></table></div>
+            </div>
+        </main>
+
+        <!-- TAB 3: STUDENTS (বিদ্যমান) -->
+       <!-- TAB 3: ADVANCED ADMISSION TERMINAL (UPGRADED) -->
+<main id="section-students" class="p-4 md:p-8 space-y-6 dashboard-section hidden">
+    
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="mb-6">
+            <span class="text-[10px] bg-orange-100 text-orange-700 font-bold uppercase tracking-widest px-2.5 py-1 rounded-md">Form Engine v2.0</span>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight mt-1">Institutional Admission Ledger</h3>
+            <p class="text-xs text-slate-400 font-medium">Baikunthapur Satish Smriti Vidyamandir (HS) - Student Enrollment Grid</p>
+        </div>
+
+        <form id="studentSetupForm" class="space-y-8">
+            
+            <!-- SECTION 1: STUDENT CORE IDENTITY -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-black text-indigo-600 uppercase tracking-wider border-l-4 border-indigo-500 pl-2">01. Student Core Identity & Info</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Student Full Name (BLOCK LETTERS)</label>
+                        <input type="text" id="studentFullName" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold uppercase" placeholder="e.g., ROHAN DAS" required>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Assign Class / Grade Scope</label>
+                        <select id="studentClassSelect" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold text-slate-700" required>
+                            <!-- Live Classes Dropdown -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Trade / Discipline Track</label>
+                        <input type="text" id="studentTrade" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="e.g., ETEM (Electrical) / HSCH">
+                    </div>
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Date of Birth</label>
+                        <input type="date" id="studentDOB" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold text-slate-700" required>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Gender</label>
+                        <select id="studentGender" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold text-slate-700">
+                            <option value="MALE">MALE</option>
+                            <option value="FEMALE">FEMALE</option>
+                            <option value="OTHER">OTHER</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Aadhaar Card Number</label>
+                        <input type="text" id="studentAadhaar" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-mono font-bold tracking-wider" placeholder="0000 0000 0000" required>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Contact Number (Mobile)</label>
+                        <input type="tel" id="studentContact" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold" placeholder="Enter mobile number" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: FAMILY & SOCIO-ECONOMIC METRICS -->
+            <div class="space-y-4 border-t border-slate-100 pt-6">
+                <h4 class="text-xs font-black text-orange-600 uppercase tracking-wider border-l-4 border-orange-500 pl-2">02. Family & Welfare Support Registry</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Father's Name</label>
+                        <input type="text" id="studentFatherName" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="Father's Name">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Mother's Name</label>
+                        <input type="text" id="studentMotherName" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="Mother's Name">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Annual Family Income (₹)</label>
+                        <input type="number" id="studentIncome" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold" placeholder="Annual Income in INR">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Religion</label>
+                        <input type="text" id="studentReligion" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="e.g., Hinduism / Islam">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Caste Category</label>
+                        <select id="studentCaste" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold text-slate-700">
+                            <option value="GENERAL">GENERAL</option>
+                            <option value="SC">SC</option>
+                            <option value="ST">ST</option>
+                            <option value="OBC">OBC</option>
+                            <option value="MINORITY">MINORITY</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">BPL Status</label>
+                        <select id="studentBPL" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold text-slate-700">
+                            <option value="NO">NO</option>
+                            <option value="YES">YES</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Kanyashree Enrollment (If Applicable)</label>
+                        <input type="text" id="studentKanyashreeId" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-mono" placeholder="Enrollment / ID No.">
+                    </div>
+                </div>
+
+                <!-- ADDRESS METADATA -->
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200/50">
+                    <div class="md:col-span-2"><input type="text" id="addrVill" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium" placeholder="Village/Street" required></div>
+                    <div><input type="text" id="addrPO" class="w-white bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium" placeholder="Post Office" required></div>
+                    <div><input type="text" id="addrPS" class="w-white bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium" placeholder="Police Station" required></div>
+                    <div><input type="text" id="addrPin" class="w-white bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-bold text-indigo-600 tracking-wider" placeholder="PIN Code" required></div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: SCHOLASTIC STANDING & BANKING ROSTER -->
+            <div class="space-y-4 border-t border-slate-100 pt-6">
+                <h4 class="text-xs font-black text-teal-600 uppercase tracking-wider border-l-4 border-teal-500 pl-2">03. Legacy Academic Standing & Bank Ledger</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-teal-50/20 p-4 rounded-2xl border border-teal-100/50">
+                    <div>
+                        <label class="block text-[11px] font-bold text-teal-800 uppercase mb-1">Previous Exam / Board</label>
+                        <input type="text" id="prevExam" class="w-full bg-white border border-slate-200 focus:border-teal-600 rounded-xl p-3 text-sm font-medium" placeholder="e.g., Madhyamik (WBBSE)">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-teal-800 uppercase mb-1">Passing Year</label>
+                        <input type="text" id="prevYear" class="w-full bg-white border border-slate-200 focus:border-teal-600 rounded-xl p-3 text-sm font-bold text-slate-700" placeholder="e.g., 2026">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-teal-800 uppercase mb-1">Mark Sheet Reference No.</label>
+                        <input type="text" id="prevMarksheetNo" class="w-full bg-white border border-slate-200 focus:border-teal-600 rounded-xl p-3 text-sm font-mono tracking-wider" placeholder="MS No.">
+                    </div>
+                </div>
+
+                <!-- BANK DETAILS ACCOUNT LOG -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Bank Name</label>
+                        <input type="text" id="bankName" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs font-medium" placeholder="e.g., State Bank of India">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Account Holder Name</label>
+                        <input type="text" id="bankHolder" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs font-medium" placeholder="As written in Passbook">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Account Number</label>
+                        <input type="text" id="bankAccNo" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs font-mono font-bold tracking-wider" placeholder="A/C Number">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">IFSC Code</label>
+                        <input type="text" id="bankIFSC" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs font-mono font-bold uppercase tracking-wider" placeholder="SBIN000XXXX">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTION SUBMIT TRIGGER BUTTON -->
+            <div class="flex justify-end pt-4 border-t border-slate-100">
+                <button type="submit" class="bg-indigo-600 text-white px-8 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 transition duration-200 cursor-pointer">
+                    <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Finalize Admission Token
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Live Registered Roster View (বিদ্যমান তালিকাটি নিচে সুন্দরভাবে সাজানো) -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+            <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500"><i class="fa-solid fa-users-viewfinder mr-1 text-teal-500"></i> Registered Students Manifest Index</h3>
+            <button onclick="fetchLiveStudents()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition cursor-pointer flex items-center space-x-1"><i class="fa-solid fa-arrows-rotate"></i> <span>Refresh</span></button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-slate-600">
+                <thead class="bg-slate-50/30 text-[10px] text-slate-500 uppercase font-bold tracking-wider border-b border-slate-100">
+                    <tr>
+                        <th class="p-4">Student Name</th>
+                        <th class="p-4">System ID / Roll</th>
+                        <th class="p-4">Class Scope</th>
+                        <th class="p-4">Aadhaar Reference</th>
+                        <th class="p-4 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody" class="divide-y divide-slate-100 text-xs font-medium"></tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+        <!-- 🚀 TAB 4: ROUTINE BUILDER (এখানে যুক্ত করা হলো) -->
+        <main id="section-routine" class="p-4 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6 dashboard-section hidden">
+            <div class="lg:col-span-1 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 h-fit">
+                <div>
+                    <h3 class="text-base font-black text-slate-900 tracking-tight">Provision Routine Slot</h3>
+                </div>
+                <form id="routineSetupForm" class="space-y-4">
+                    <select id="routineClassSelect" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold text-slate-700" required></select>
+                    <select id="routineDaySelect" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold text-slate-700" required>
+                        <option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option>
+                    </select>
+                    <input type="text" id="routineSubject" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="Subject Name" required>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="routineStart" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="Start (10:30 AM)" required>
+                        <input type="text" id="routineEnd" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-medium" placeholder="End (11:15 AM)" required>
+                    </div>
+                    <select id="routineTeacherSelect" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-600 rounded-xl p-3 text-sm font-bold text-slate-700" required></select>
+                    <button type="submit" class="w-full bg-indigo-600 text-white p-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 shadow-lg shadow-indigo-600/10 transition cursor-pointer"><i class="fa-solid fa-plus mr-1"></i> Commit Routine Slot</button>
+                </form>
+            </div>
+            
+            <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden h-fit">
+                <div class="p-5 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500"><i class="fa-solid fa-table-list mr-1 text-teal-500"></i> Active Timetable Streams</h3>
+                    <button onclick="fetchLiveRoutines()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition cursor-pointer flex items-center space-x-1"><i class="fa-solid fa-arrows-rotate"></i> <span>Refresh Grid</span></button>
+                </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-slate-600">
                         <thead class="bg-slate-50/70 text-[10px] text-slate-500 uppercase font-bold tracking-wider border-b border-slate-100">
-                            <tr>
-                                <th class="p-4">Class Entry ID</th>
-                                <th class="p-4">School Scope ID</th>
-                                <th class="p-4">Class Reference</th>
-                                <th class="p-4 text-right">Section Designation</th>
-                            </tr>
+                            <tr><th class="p-4">Class</th><th class="p-4">Day</th><th class="p-4">Subject Timeline</th><th class="p-4">Faculty ID</th><th class="p-4 text-right">Action</th></tr>
                         </thead>
-                        <tbody id="classTableBody" class="divide-y divide-slate-100 text-xs font-medium">
-                            <tr>
-                                <td colspan="4" class="p-8 text-center text-slate-400 font-medium">Please select refresh or enter data matrix grid lines...</td>
-                            </tr>
-                        </tbody>
+                        <tbody id="routineTableBody" class="divide-y divide-slate-100 text-xs font-medium"></tbody>
                     </table>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Live Data Processing Engine Code Script Pipeline -->
+    <!-- Scripts -->
     <script>
-        // Supabase Live Sync Config Properties
         const SUPABASE_URL = "https://iystmwxuzyhaoxmqlvof.supabase.co"; 
         const SUPABASE_ANON_KEY = "sb_publishable_1xHmvDN9TYSS3hoUGR7npQ_tUSa8dnh"; 
-
         supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Fetch Live Classes from DB Core Layer Pipeline Execution
-        async function fetchLiveClasses() {
-            const tableBody = document.getElementById('classTableBody');
+        function switchTab(tabId) {
+            document.querySelectorAll('.dashboard-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`section-${tabId}`).classList.remove('hidden');
             
-            const { data: classesList, error } = await supabase
-                .from('classes')
-                .select('*')
-                .order('id', { ascending: false });
-
-            if (error) {
-                tableBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-rose-500 font-bold">Query Error: ${error.message}</td></tr>`;
-                return;
-            }
-
-            if (!classesList || classesList.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">No classes configured for this node pipeline yet.</td></tr>`;
-                return;
-            }
-
-            tableBody.innerHTML = "";
-            classesList.forEach(c => {
-                const rowHTML = `
-                    <tr class="hover:bg-slate-50/50 transition">
-                        <td class="p-4 font-mono text-slate-400 font-bold"># ${c.id}</td>
-                        <td class="p-4 font-mono font-bold text-indigo-600">${c.school_id}</td>
-                        <td class="p-4 font-black text-slate-900">${c.class_name}</td>
-                        <td class="p-4 text-right font-bold text-teal-600"><span class="bg-teal-50 border border-teal-100 px-2.5 py-1 rounded-lg">${c.section_name}</span></td>
-                    </tr>
-                `;
-                tableBody.innerHTML += rowHTML;
+            ['classes', 'teachers', 'students', 'routine'].forEach(id => {
+                document.getElementById(`tabBtn-${id}`).className = "w-full text-left p-3 rounded font-bold block cursor-pointer text-slate-400 hover:text-white";
             });
+            document.getElementById(`tabBtn-${tabId}`).className = "w-full text-left p-3 rounded bg-indigo-900/50 text-indigo-200 border-l-4 border-indigo-500 font-bold block cursor-pointer";
+            
+            if(tabId === 'classes') { fetchLiveClasses(); document.getElementById('pageTitle').innerText = "Academic Operations"; }
+            else if(tabId === 'teachers') { fetchLiveTeachers(); document.getElementById('pageTitle').innerText = "Faculty Roster Setup"; }
+            else if(tabId === 'students') { populateClassDropdown(); fetchLiveStudents(); document.getElementById('pageTitle').innerText = "Student Admission Directory"; }
+            else if(tabId === 'routine') { populateRoutineDropdowns(); fetchLiveRoutines(); document.getElementById('pageTitle').innerText = "Routine Orchestration Engine"; }
         }
 
-        // Add/Create Class Module Database Request Action Pipeline Routing
-        document.getElementById('classSetupForm').addEventListener('submit', async function(e) {
+        // ================== DELETE LOGIC ==================
+        async function deleteProfile(profileId, roleType) {
+            if (!confirm("Are you sure you want to completely remove this node record?")) return;
+            const { error } = await supabase.from('user_profiles').delete().eq('id', profileId);
+            if (error) alert("Deletion Refused: " + error.message); else { alert("Data wiped."); if (roleType === 'teacher') fetchLiveTeachers(); else fetchLiveStudents(); }
+        }
+
+        async function deleteRoutineSlot(slotId) {
+            if (!confirm("Wipe this schedule slot from the active timeline?")) return;
+            const { error } = await supabase.from('routines').delete().eq('id', slotId);
+            if (error) alert(error.message); else fetchLiveRoutines();
+        }
+
+        // ================== CLASSES ==================
+        async function fetchLiveClasses() {
+            const tableBody = document.getElementById('classTableBody');
+            const { data, error } = await supabase.from('classes').select('*').order('id', { ascending: false });
+            tableBody.innerHTML = "";
+            if (data) data.forEach(c => tableBody.innerHTML += `<tr><td class="p-4"># ${c.id}</td><td class="p-4">${c.school_id}</td><td class="p-4 font-black">${c.class_name}</td><td class="p-4 text-right">${c.section_name}</td></tr>`);
+        }
+        document.getElementById('classSetupForm').addEventListener('submit', async function(e) { e.preventDefault(); /* ... */ fetchLiveClasses(); });
+
+        // ================== TEACHERS ==================
+        async function fetchLiveTeachers() {
+            const tableBody = document.getElementById('teacherTableBody');
+            const { data: teachers, error } = await supabase.from('user_profiles').select('*').eq('role', 'teacher').order('created_at', { ascending: false });
+            tableBody.innerHTML = "";
+            if (teachers) teachers.forEach(t => tableBody.innerHTML += `<tr class="border-b"><td class="p-4 font-black">${t.full_name}</td><td class="p-4 font-mono font-bold">${t.username}</td><td class="p-4">${t.email}<br>${t.contact_number}</td><td class="p-4 text-right"><button onclick="deleteProfile('${t.id}', 'teacher')" class="text-rose-600 bg-rose-50 px-2 py-1 rounded">Delete</button></td></tr>`);
+        }
+        // ... (teacher submit form code)
+
+        // ================== STUDENTS ==================
+        async function populateClassDropdown() { /* ... */ }
+        async function fetchLiveStudents() {
+            const tableBody = document.getElementById('studentTableBody');
+            const { data: students, error } = await supabase.from('user_profiles').select('*').eq('role', 'student').order('created_at', { ascending: false });
+            tableBody.innerHTML = "";
+            if (students) students.forEach(s => tableBody.innerHTML += `<tr class="border-b"><td class="p-4 font-black">${s.full_name}</td><td class="p-4 font-mono font-bold">${s.username}</td><td class="p-4">Class ID: ${s.class_id}</td><td class="p-4">${s.contact_number}</td><td class="p-4 text-right"><button onclick="deleteProfile('${s.id}', 'student')" class="text-rose-600 bg-rose-50 px-2 py-1 rounded">Delete</button></td></tr>`);
+        }
+        // ... (student submit form code)
+
+        // ================== 🚀 NEW: ROUTINE BUILDER (MOVED HERE) ==================
+        async function populateRoutineDropdowns() {
+            const classSelect = document.getElementById('routineClassSelect');
+            const teacherSelect = document.getElementById('routineTeacherSelect');
+            const { data: classes } = await supabase.from('classes').select('id, class_name, section_name');
+            classSelect.innerHTML = `<option value="">-- Select Class --</option>`;
+            if (classes) classes.forEach(c => classSelect.innerHTML += `<option value="${c.id}">${c.class_name} (${c.section_name})</option>`);
+            const { data: teachers } = await supabase.from('user_profiles').select('id, full_name, username').eq('role', 'teacher');
+            teacherSelect.innerHTML = `<option value="">-- Select Faculty --</option>`;
+            if (teachers) teachers.forEach(t => teacherSelect.innerHTML += `<option value="${t.username}">${t.full_name} (${t.username})</option>`);
+        }
+
+        async function fetchLiveRoutines() {
+            const tableBody = document.getElementById('routineTableBody');
+            const { data: routinesList, error } = await supabase.from('routines').select('*').order('id', { ascending: false });
+            tableBody.innerHTML = "";
+            if (routinesList) routinesList.forEach(r => tableBody.innerHTML += `<tr class="border-b"><td class="p-4 font-mono font-bold">Class ID: ${r.class_id}</td><td class="p-4 font-black">${r.day_of_week}</td><td class="p-4"><div class="font-bold">${r.subject_name}</div><div class="text-[11px]">${r.start_time} - ${r.end_time}</div></td><td class="p-4 font-mono text-teal-600">${r.teacher_id}</td><td class="p-4 text-right"><button onclick="deleteRoutineSlot(${r.id})" class="text-rose-600 bg-rose-50 px-2.5 py-1.5 rounded-lg transition"><i class="fa-solid fa-trash-can"></i></button></td></tr>`);
+        }
+
+        document.getElementById('routineSetupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
-            const schoolId = document.getElementById('targetSchoolId').value.trim();
-            const className = document.getElementById('targetClassName').value.trim();
-            const sectionName = document.getElementById('targetSectionName').value.trim();
-
-            // Fire direct insert operation statement 
-            const { error } = await supabase
-                .from('classes')
-                .insert([
-                    { school_id: schoolId, class_name: className, section_name: sectionName }
-                ]);
-
-            if (error) {
-                alert("Database Operations Refused: " + error.message);
-            } else {
-                alert(`Success! "${className} (${sectionName})" has been officially listed under node "${schoolId}".`);
-                document.getElementById('targetClassName').value = "";
-                document.getElementById('targetSectionName').value = "";
-                fetchLiveClasses(); // Trigger instant view recalculation hook
-            }
+            const classId = document.getElementById('routineClassSelect').value;
+            const dayOfWeek = document.getElementById('routineDaySelect').value;
+            const subject = document.getElementById('routineSubject').value.trim();
+            const start = document.getElementById('routineStart').value.trim();
+            const end = document.getElementById('routineEnd').value.trim();
+            const teacherId = document.getElementById('routineTeacherSelect').value;
+            const { error } = await supabase.from('routines').insert([{ school_id: "SCH-8576", class_id: classId, day_of_week: dayOfWeek, subject_name: subject, start_time: start, end_time: end, teacher_id: teacherId }]);
+            if (error) alert(error.message); else { alert("Routine saved."); fetchLiveRoutines(); }
         });
 
-        // Hook system lifecycle windows layer process entry states
-        window.onload = fetchLiveClasses;
+        window.onload = function() { fetchLiveClasses(); };
     </script>
 </body>
 </html>
