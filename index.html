@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>স্কুল ম্যানেজমেন্ট - লগইন</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 flex items-center justify-center h-screen px-4">
+
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-100">
+        <div class="text-center mb-6">
+            <div class="inline-flex p-3 bg-indigo-100 text-indigo-600 rounded-full mb-3">
+                <i class="fa-solid fa-school text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800">স্মার্ট স্কুল পোর্টাল</h2>
+            <p class="text-sm text-gray-500 mt-1">আপনার অ্যাকাউন্টে প্রবেশ করতে লগইন করুন</p>
+        </div>
+        
+        <form id="loginForm" class="space-y-4">
+            <!-- রোল সিলেকশন -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">আপনার পদবী বা রোল বাছুন</label>
+                <div class="relative mt-1">
+                    <select id="userRole" class="block w-full p-2.5 border border-gray-300 rounded-md bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <option value="">-- রোল সিলেক্ট করুন --</option>
+                        <option value="super-admin">সুপার এডমিন (Super Admin)</option>
+                        <option value="school-admin">স্কুল এডমিন (School Admin)</option>
+                        <option value="teacher">শিক্ষক (Teacher)</option>
+                        <option value="student">ছাত্র / অভিভাবক (Student)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- স্কুল আইডি ইনপুট বক্স (সুপার এডমিন ছাড়া বাকি সবার জন্য এটি অটো ওপেন হবে) -->
+            <div id="schoolIdBox" class="hidden transition-all duration-300">
+                <label class="block text-sm font-medium text-gray-700">স্কুল ID (School ID)</label>
+                <div class="relative mt-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                        <i class="fa-solid fa-key text-xs"></i>
+                    </div>
+                    <input type="text" id="schoolId" class="block w-full pl-9 p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="যেমন: SCH-8492">
+                </div>
+            </div>
+
+            <!-- ইউজারনেম/ইমেইল -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">ইমেইল বা ইউজারনেম</label>
+                <div class="relative mt-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                        <i class="fa-solid fa-envelope text-xs"></i>
+                    </div>
+                    <input type="email" id="email" class="block w-full pl-9 p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="demo@school.com" required>
+                </div>
+            </div>
+
+            <!-- পাসওয়ার্ড -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">পাসওয়ার্ড</label>
+                <div class="relative mt-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                        <i class="fa-solid fa-lock text-xs"></i>
+                    </div>
+                    <input type="password" id="password" class="block w-full pl-9 p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="******" required>
+                </div>
+            </div>
+
+            <!-- লগইন বাটন -->
+            <button type="submit" class="w-full bg-indigo-600 text-white p-2.5 rounded-md font-semibold hover:bg-indigo-700 shadow transition duration-200 cursor-pointer">
+                <i class="fa-solid fa-right-to-bracket mr-1"></i> ড্যাশবোর্ডে প্রবেশ করুন
+            </button>
+        </form>
+    </div>
+
+    <!-- জাভাস্ক্রিপ্ট লজিক -->
+    <script>
+        // রোল পরিবর্তনের সাথে সাথে স্কুল আইডি ফিল্ড কন্ট্রোল করার লজিক
+        document.getElementById('userRole').addEventListener('change', function() {
+            const role = this.value;
+            const idBox = document.getElementById('schoolIdBox');
+            const schoolIdInput = document.getElementById('schoolId');
+            
+            // সুপার এডমিন বা খালি থাকলে স্কুল আইডি লাগবে না, বাকিদের জন্য বাধ্যতামূলক
+            if (role === 'super-admin' || role === '') {
+                idBox.classList.add('hidden');
+                schoolIdInput.removeAttribute('required');
+                schoolIdInput.value = ''; // ক্লিয়ার করে দেওয়ার জন্য
+            } else {
+                idBox.classList.remove('hidden');
+                schoolIdInput.setAttribute('required', 'required');
+            }
+        });
+
+        // ফর্ম সাবমিট হ্যান্ডলার
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const role = document.getElementById('userRole').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const schoolId = document.getElementById('schoolId').value;
+
+            if(email && password) {
+                // সুপার এডমিনের জন্য কোনো স্কুল আইডি লাগবে না
+                if(role === 'super-admin') {
+                    window.location.href = 'super-admin.html';
+                } else {
+                    // ডেমো এলার্ট - ডেটাবেস যুক্ত করার পর এটি ডাটা চেক করবে 
+                    alert('স্কুল আইডি: ' + schoolId + ' এর অধীনে আপনাকে ড্যাশবোর্ডে রিডাইরেক্ট করা হচ্ছে।');
+                    
+                    if(role === 'school-admin') {
+                        window.location.href = 'school-admin.html';
+                    } else if(role === 'teacher') {
+                        window.location.href = 'teacher.html';
+                    } else if(role === 'student') {
+                        window.location.href = 'student.html';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
